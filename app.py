@@ -67,6 +67,39 @@ def download_image(url):
         st.error(f"Error downloading image: {str(e)}")
         return None
 
+def display_image_with_actions(image_url, caption="Generated Image", download_filename="image.png"):
+    """Display image with open in new tab and download buttons."""
+    if image_url:
+        # Display image prominently
+        st.image(image_url, caption=caption, use_column_width=True)
+        
+        # Create buttons below image
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            # Open in new tab button
+            if st.button(f"🔗 Open in New Tab", use_container_width=True):
+                st.markdown(f'<meta http-equiv="refresh" content="0; url={image_url}" />', unsafe_allow_html=True)
+                st.info("Opening image in new tab...")
+        
+        with col2:
+            # Download button
+            image_data = download_image(image_url)
+            if image_data:
+                st.download_button(
+                    "⬇️ Download Image",
+                    image_data,
+                    download_filename,
+                    "image/png",
+                    use_container_width=True
+                )
+        
+        with col3:
+            # Copy URL button
+            if st.button("📋 Copy URL", use_container_width=True):
+                st.code(image_url, language=None)
+                st.success("URL displayed below!")
+
 def apply_image_filter(image, filter_type):
     """Apply various filters to the image."""
     try:
@@ -264,6 +297,16 @@ def main():
                 except Exception as e:
                     st.error(f"Error generating images: {str(e)}")
                     st.write("Full error:", str(e))
+        
+        # Display generated image
+        if st.session_state.edited_image:
+            st.divider()
+            st.subheader("✨ Your Generated Image")
+            display_image_with_actions(
+                st.session_state.edited_image,
+                caption="Generated Image",
+                download_filename="generated_image.png"
+            )
     
     # Product Photography Tab
     with tabs[1]:
@@ -660,15 +703,11 @@ def main():
             
             with col2:
                 if st.session_state.edited_image:
-                    st.image(st.session_state.edited_image, caption="Edited Image", use_column_width=True)
-                    image_data = download_image(st.session_state.edited_image)
-                    if image_data:
-                        st.download_button(
-                            "⬇️ Download Result",
-                            image_data,
-                            "edited_product.png",
-                            "image/png"
-                        )
+                    display_image_with_actions(
+                        st.session_state.edited_image,
+                        caption="Edited Image",
+                        download_filename="edited_product.png"
+                    )
                 elif st.session_state.pending_urls:
                     st.info("Images are being generated. Click the refresh button above to check if they're ready.")
 
@@ -816,15 +855,11 @@ def main():
             
             with col2:
                 if st.session_state.edited_image:
-                    st.image(st.session_state.edited_image, caption="Generated Result", use_column_width=True)
-                    image_data = download_image(st.session_state.edited_image)
-                    if image_data:
-                        st.download_button(
-                            "⬇️ Download Result",
-                            image_data,
-                            "generated_fill.png",
-                            "image/png"
-                        )
+                    display_image_with_actions(
+                        st.session_state.edited_image,
+                        caption="Generated Result",
+                        download_filename="generated_fill.png"
+                    )
                 elif st.session_state.pending_urls:
                     st.info("Generation in progress. Click the refresh button above to check status.")
 
@@ -910,16 +945,11 @@ def main():
             
             with col2:
                 if st.session_state.edited_image:
-                    st.image(st.session_state.edited_image, caption="Result", use_column_width=True)
-                    image_data = download_image(st.session_state.edited_image)
-                    if image_data:
-                        st.download_button(
-                            "⬇️ Download Result",
-                            image_data,
-                            "erased_image.png",
-                            "image/png",
-                            key="erase_download"
-                        )
+                    display_image_with_actions(
+                        st.session_state.edited_image,
+                        caption="Result",
+                        download_filename="erased_image.png"
+                    )
 
 if __name__ == "__main__":
     main() 
