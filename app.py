@@ -190,7 +190,7 @@ def main():
                             if result:
                                 st.session_state.enhanced_prompt = result
                                 st.success("Prompt enhanced!")
-                                st.experimental_rerun()  # Rerun to update the display
+                                st.rerun()  # Rerun to update the display
                         except Exception as e:
                             st.error(f"Error enhancing prompt: {str(e)}")
                             
@@ -542,14 +542,14 @@ def main():
                                                 
                                                 # Try automatic checking first
                                                 if auto_check_images(status_container):
-                                                    st.experimental_rerun()
+                                                    st.rerun()
                                                 
                                                 # Add refresh button for manual checking
                                                 if refresh_container.button("🔄 Check for Generated Images"):
                                                     with st.spinner("Checking for completed images..."):
                                                         if check_generated_images():
                                                             status_container.success("✨ Image ready!")
-                                                            st.experimental_rerun()
+                                                            st.rerun()
                                                         else:
                                                             status_container.warning(f"⏳ Still generating your image{'s' if len(urls) > 1 else ''}... Please check again in a moment.")
                                 except Exception as e:
@@ -643,14 +643,14 @@ def main():
                                                 
                                                 # Try automatic checking first
                                                 if auto_check_images(status_container):
-                                                    st.experimental_rerun()
+                                                    st.rerun()
                                                 
                                                 # Add refresh button for manual checking
                                                 if refresh_container.button("🔄 Check for Generated Images"):
                                                     with st.spinner("Checking for completed images..."):
                                                         if check_generated_images():
                                                             status_container.success("✨ Image ready!")
-                                                            st.experimental_rerun()
+                                                            st.rerun()
                                                         else:
                                                             status_container.warning(f"⏳ Still generating your image{'s' if len(urls) > 1 else ''}... Please check again in a moment.")
                                 except Exception as e:
